@@ -14,7 +14,7 @@ fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 
 var userLogStream = FileStreamRotator.getStream({
     filename: logDirectory + '/access-%DATE%.log',
-    frequency: 'daily',//Ð´ÎÄ¼þÆµÂÊ 1m 1·ÖÖÓ
+    frequency: 'daily',//Ð´ï¿½Ä¼ï¿½Æµï¿½ï¿½ 1m 1ï¿½ï¿½ï¿½ï¿½
     verbose: false,
     date_format: "YYYY-MM-DD"
 });
@@ -39,6 +39,8 @@ app.set('views', path.join(__dirname,'views'));
 app.set('view engine','hjs');
 /*app.set('view engine','html');
 app.engine('html', require('hjs').__express);*/
+app.set('partials', {header: 'share/header'});
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));

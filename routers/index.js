@@ -15,20 +15,28 @@ router.get('/',function(req,res,next){
 });
 router.get('/list',function(req,res,next){
     db.query('select * from [products]',function(err,data) {
-        res.render('list',{
-            partials:{'header': 'share/header'},
-            name: req.session[__appSessionKey],
-            'list': data.data
-        });
+        if(err){
+            next(err);
+        }else {
+            res.render('list',{
+                //partials:{'header': 'share/header'},
+                name: req.session[__appSessionKey],
+                'list': data.data
+            });
+        }
     });
 });
 router.get('/detail/:id',function(req,res,next){
     db.query('select * from [products] where [id]='+parseInt(req.params.id)||0,function(err,data) {
-        res.render('detail',{
-            partials:{'header': 'share/header'},
-            name: req.session[__appSessionKey],
-            'data': data.data
-        });
+        if(err){
+            next(err);
+        }else {
+            res.render('detail',{
+                //partials:{'header': 'share/header'},
+                name: req.session[__appSessionKey],
+                'data': data.data
+            });
+        }
     });
 });
 router.get('/logout',function(req,res,next){

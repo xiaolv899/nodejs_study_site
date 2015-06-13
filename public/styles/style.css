@@ -20,3 +20,6 @@ a.abtn:hover{background:#fff;}
 
 .opter{margin:20px;border:solid 2px #ddd;padding:10px;}
 .opter div{margin:8px 0;}
+
+.detail{border-left:solid 5px #00B7FF;padding:5px 0 5px 20px;margin:20px 0 0;zoom:1;
+  overflow: hidden;background:#f7f7f7;}
