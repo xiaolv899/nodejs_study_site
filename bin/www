@@ -1,7 +1,12 @@
 var app = require('../app');
 var http = require('http');
 
-http.createServer(app).listen(3000)
+var server = http.createServer(app);
+server.listen(3000)
     .on('listening',function(){
-        console.log('server is run 3000');
+        var addr = server.address();
+        var bind = typeof addr === 'string'
+            ? 'pipe ' + addr
+            : 'port ' + addr.port;
+        console.log('Listening on ' + bind);
     });
