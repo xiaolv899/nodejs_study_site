@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=""/>
+    <title>{{data.name}} - {{ title }}</title>
+    <link rel='stylesheet' href='/styles/style.css' />
+</head>
+<body>
+{{>header}}
+<div class="detail">
+    {{#data}}
+    <div>
+        <h3>{{name}}</h3>
+        <p><img src="{{image}}" /></p>
+        <p>{{des}}</p>
+        <a href="/list">返回列表</a>
+    </div>
+    {{/data}}
+    {{^data}}
+    <b>Error：产品不存在</b>
+    {{/data}}
+</div>
+</body>
+</html>

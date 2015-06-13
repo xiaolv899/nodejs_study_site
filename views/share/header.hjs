@@ -1,0 +1,7 @@
+<h1>{{ title }}</h1>
+{{#name}}
+<p>Hello {{name}}! <a href="/logout">退出</a></p>
+{{/name}}
+{{^name}}
+<p>Welcome, <a href="/">Log in</a></p>
+{{/name}}

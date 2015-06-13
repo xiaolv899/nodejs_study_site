@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=""/>
+    <title>{{ title }}</title>
+    <link rel='stylesheet' href='/styles/style.css' />
+</head>
+<body>
+{{>header}}
+<a href="#" class="abtn" id="add">添加</a>
+<div class="list">
+    {{#prevpage}}<div><a href="?page={{prevpage}}">上一页</a> <a href="?page={{nextpage}}">下一页</a> </div>{{/prevpage}}
+    {{#list}}
+    <div data-id="{{id}}" class="item">
+        <h3><a href="/detail/{{id}}">{{name}}</a></h3>
+        <p><img src="{{image}}" /></p>
+        <p>{{des}}</p>
+        <a href="#" class="abtn" rel="{{id}}" oper="edit">编辑</a> <a href="#" class="abtn" rel="{{id}}" oper="delete">删除</a>
+    </div>
+    {{/list}}
+    {{#prevpage}}<div><a href="?page={{prevpage}}">上一页</a> <a href="?page={{nextpage}}">下一页</a> </div>{{/prevpage}}
+    {{^list}}
+    <div class="nodata">暂无任何商品</div>
+    {{/list}}
+</div>
+<div id="template" style="display: none;">
+    <div class="opter">
+        <div>产品标题：<input type="text" name="title" value="<$title$>"></div>
+        <div>产品图片：<input type="text" name="image" value="<$image$>"></div>
+        <div>产品介绍：<input type="text" name="des" value="<$des$>"></div>
+        <input type="button" value="submit" />
+    </div>
+</div>
+<script type="text/javascript" src="/javascripts/jquery-1.9.1.min.js"></script>
+<script type="text/javascript">
+    var getField = function($parent){
+        return {
+            "id": 0,
+            "name":$parent.find("input[name='title']").val(),
+            "image":$parent.find("input[name='image']").val(),
+            "des":$parent.find("input[name='des']").val()
+        }
+    }
+    $("#add").click(function(){
+        var $add = $("#add_template");
+        if($add.length==0){
+            $add = $("<div id=\"add_template\"></div>");
+            $add.html($("#template").html().replace(/<\$(.+)?\$>/ig,''));
+            $add.find("input[type='button']").click(function(){
+                $.ajax({
+                    url: '/product/save',
+                    data: getField($add),
+                    cache: false,
+                    dataType: "json",
+                    type: "POST",
+                    success: function (result) {
+                        if(result.isSuccess)
+                            location.reload();
+                    }
+                });
+            });
+            $(this).after($add);
+        }else
+            $add.toggle();
+        return false;
+    });
+    $("a[oper='delete']").click(function(){
+        var $id = $(this).attr("rel");
+        if(confirm("确定要删除吗")) {
+            $.ajax({
+                url: '/product/delete',
+                data: {id: $id},
+                cache: false,
+                dataType: "json",
+                type: "POST",
+                success: function (result) {
+                    if (result.isSuccess){
+                        $("div[data-id='"+$id+"']").slideUp(function(){
+                            $(this).remove();
+                        });
+                    }
+                }
+            });
+        }
+        return false;
+    });
+    $("a[oper='edit']").click(function(){
+        var $id = $(this).attr("rel");
+        var $parent = $(this).parent();
+        var $dom = $(this).next().next("div");
+        if($dom.length==0){
+            $dom = $("<div type=\"edit_template\"></div>");
+            var $temp = $("#template").html().replace('<$title$>',$parent.find("h3 a").text());
+            $temp = $temp.replace('<$image$>',$parent.find("img").attr('src'));
+            $temp = $temp.replace('<$des$>',$parent.find("p:eq(1)").text());
+            $dom.html($temp);
+            $dom.find("input[type='button']").click(function(){
+                var postdata = getField($dom);
+                postdata.id = $id;
+                $.ajax({
+                    url: '/product/save',
+                    data: postdata,
+                    cache: false,
+                    dataType: "json",
+                    type: "POST",
+                    success: function (result) {
+                        if(result.isSuccess)
+                            location.reload();
+                    }
+                });
+            });
+            $(this).next().after($dom);
+        }else
+            $dom.toggle();
+
+        return false;
+    });
+</script>
+</body>
+</html>

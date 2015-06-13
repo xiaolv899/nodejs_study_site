@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=""/>
+    <title>{{ title }}</title>
+    <link rel='stylesheet' href='/styles/style.css' />
+</head>
+<body>
+{{>header}}
+<div class="login">
+    <form method="post" action="login">
+        <p>登录账号：<input type="text" name="name" ></p>
+        <p>登录密码：<input type="password" name="password" ></p>
+        <p class="btn"><input type="submit" value="submit" ></p>
+    </form>
+</div>
+<div><a href="/list">产品列表</a></div>
+</body>
+</html>
