@@ -28,46 +28,43 @@ var show = function (req,res,data){
 };
 
 router.get('/',function(req,res,next){
+    var _userlist = null, _orderlist = null;
     db.query('select * from [users] where name=\''+req.session[__appSessionKey]+'\'').
         then(function(data){
-            if(data.length>0) {
+            if((_userlist=data).length>0) {
                 var _uids = getIds(data,"id");
                 var $ordersql = 'select * from [orders] where userid in('+_uids+')';
-                db.query($ordersql).
-                    then(function(orderdata){
-                        //console.log(orderdata);
-                        var _pids = getIds(orderdata,"productID");
-                        var $resultsql = 'select * from [products] where id in('+_pids+')';
-                        db.query($resultsql).
-                            then(function(prodata){
-                                for(var y in orderdata){
-                                    for(var x in data){
-                                        if(data[x].id == orderdata[y].userID){
-                                            orderdata[y].username = data[x].name;
-
-                                            for(var z in prodata){
-                                                if(orderdata[y].productID == prodata[z].id){
-                                                    orderdata[y].proName = prodata[z].name;
-                                                    orderdata[y].image = prodata[z].image;
-                                                    orderdata[y].des = prodata[z].des;
-                                                    break;
-                                                }
-                                            }
-                                            break;
-                                        }
-                                    }
-                                }
-                                //console.log(data);
-                                show(req,res,orderdata);
-                            },function(err){
-                                next(err);
-                            });
-                    },function(err){
-                        next(err);
-                    });
+                return db.query($ordersql);
             }else
-                show(req,res,'no data');
-        },function(err){
+                throw 'no data';
+        }).
+        then(function(orderdata){
+            //console.log(orderdata);
+            var _pids = getIds((_orderlist=orderdata),"productID");
+            var $resultsql = 'select * from [products] where id in('+_pids+')';
+            return db.query($resultsql);
+        }).
+        then(function(prodata){
+            for(var y in _orderlist){
+                for(var x in _userlist){
+                    if(_userlist[x].id == _orderlist[y].userID){
+                        _orderlist[y].username = _userlist[x].name;
+
+                        for(var z in prodata){
+                            if(_orderlist[y].productID == prodata[z].id){
+                                _orderlist[y].proName = prodata[z].name;
+                                _orderlist[y].image = prodata[z].image;
+                                _orderlist[y].des = prodata[z].des;
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            show(req,res,_orderlist);
+        }).
+        fail(function(err){
             next(err);
         });
 });
