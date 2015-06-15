@@ -1,6 +1,6 @@
 <h1>{{ title }}</h1>
 {{#name}}
-<p>Hello {{name}}! <a href="/orderlist">订单中心</a> | <a href="/logout">退出</a></p>
+<p>Hello {{name}}! <a href="/list">产品中心</a> | <a href="/orderlist">订单中心</a> | <a href="/logout">退出</a></p>
 {{/name}}
 {{^name}}
 <p>Welcome, <a href="/">Log in</a></p>
