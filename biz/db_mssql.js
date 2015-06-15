@@ -17,7 +17,7 @@ var config = {
 
 function execute(sql, callback){
     //虚拟数据
-    if(sql.indexOf('[users]')!=-1)
+    /*if(sql.indexOf('[users]')!=-1)
         callback(null,{
             data:[{
             'name':'admin',
@@ -42,7 +42,7 @@ function execute(sql, callback){
                 { 'id':4, 'name':'产品1', 'image':'http://img.1caifu.com/Upload/Company/Logo/20150421/2015042120084916724159.jpg', 'des':'说明1'},
                 { 'id':5, 'name':'产品1', 'image':'http://img.1caifu.com/Upload/Company/Logo/20150421/2015042120084101855151.jpg', 'des':'说明1'}
             ]});
-    return;
+    return;*/
 
     var connection = new mssql.Connection(config, function(err) {
         console.log(sql);
