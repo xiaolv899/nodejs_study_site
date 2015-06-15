@@ -19,8 +19,9 @@ function execute(sql, callback){
     //虚拟数据
     if(sql.indexOf('[users]')!=-1)
         callback(null,{
+            data:[{
             'name':'admin',
-            'password':'123'
+            'password':'123'}]
         });
     else if(sql.indexOf('update')!=-1||sql.indexOf('insert')!=-1||sql.indexOf('delete')!=-1)
         callback(null,{
