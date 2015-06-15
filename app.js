@@ -22,7 +22,9 @@ var userLogStream = FileStreamRotator.getStream({
 var auth = require('./biz/auth');
 var userlogger = require('./biz/weblog');
 var router = require('./routers/index');
+var productlist = require('./routers/list');
 var product = require('./routers/product');
+var orderlist = require('./routers/orderlist');
 
 var app = express();
 
@@ -44,11 +46,13 @@ app.set('partials', {header: 'share/header'});
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(auth({path:["/list","/detail","/product"],login:"/",key:__appSessionKey}));
+app.use(auth({path:["/list","/detail","/product","/orderlist"],login:"/",key:__appSessionKey}));
 app.use(userlogger({key: __appSessionKey,stream: userLogStream}));
 
 app.use('/',router);
+app.use('/list',productlist);
 app.use('/product',product);
+app.use('/orderlist',orderlist);
 
 app.use(function(req, res, next){
     var err = new Error('Not Found');

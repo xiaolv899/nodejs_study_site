@@ -13,20 +13,6 @@ router.get('/',function(req,res,next){
         title: 'Express'
     });
 });
-router.get('/list',function(req,res,next){
-    db.query('select * from [products]',function(err,data) {
-        if(err){
-            next(err);
-        }else {
-            res.render('list',{
-                partials:{'header': 'share/header'},
-                title: 'Express',
-                name: req.session[__appSessionKey],
-                'list': data.data
-            });
-        }
-    });
-});
 router.get('/detail/:id',function(req,res,next){
     db.query('select * from [products] where [id]='+parseInt(req.params.id)||0,function(err,data) {
         if(err){

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=""/>
+    <title>{{ title }}</title>
+    <link rel='stylesheet' href='/styles/style.css' />
+</head>
+<body>
+{{>header}}
+<div class="list">
+    {{#prevpage}}<div><a href="?page={{prevpage}}">上一页</a> <a href="?page={{nextpage}}">下一页</a> </div>{{/prevpage}}
+    {{#list}}
+    <div data-id="{{id}}" class="item">
+        <h3><a href="/detail/{{productID}}">{{proName}}</a> ({{username}})</h3>
+        <p><img src="{{image}}" /></p>
+        <p>{{des}}</p>
+    </div>
+    {{/list}}
+    {{#prevpage}}<div><a href="?page={{prevpage}}">上一页</a> <a href="?page={{nextpage}}">下一页</a> </div>{{/prevpage}}
+    {{^list}}
+    <div class="nodata">暂无任何数据</div>
+    {{/list}}
+</div>
+</body>
+</html>

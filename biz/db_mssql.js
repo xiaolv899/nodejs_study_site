@@ -2,6 +2,7 @@
  * Created by Administrator on 2015/6/10.
  */
 var mssql = require('mssql');
+var q = require('q');
 var config = {
     user: 'sa',
     password: 'sql@123',
@@ -43,22 +44,28 @@ function execute(sql, callback){
                 { 'id':5, 'name':'产品1', 'image':'http://img.1caifu.com/Upload/Company/Logo/20150421/2015042120084101855151.jpg', 'des':'说明1'}
             ]});
     return;*/
-
+    var deferred = q.defer();
     var connection = new mssql.Connection(config, function(err) {
         console.log(sql);
         if(err) {
             console.log(err);
-            callback(err);
+            if(callback)callback(err);
+            deferred.reject(err);
             return;
         }
         var request = new mssql.Request(connection); // or: var request = connection.request();
         request.query(sql, function(err,recordset){
-            callback(err,{
+            if(callback) callback(err,{
                 data: recordset
             });
+            if(err)
+                deferred.reject(err);
+            else
+                deferred.resolve(recordset);
         });
         //connection.close();
     });
+    return deferred.promise;
 }
 function getFieldValue(val) {
     if (typeof val === 'string') {
@@ -71,7 +78,7 @@ function getFieldValue(val) {
 }
 
 exports.query = function(sql,callback){
-    execute(sql, callback);
+    return execute(sql, callback);
 };
 exports.insert = function(data, callback){
     var insert1 = "";
@@ -81,5 +88,5 @@ exports.insert = function(data, callback){
         insert2+=","+getFieldValue(data[k]);
     }
     var sql = "insert into [products]("+insert1.substr(1)+") values("+insert2.substr(1)+")";
-    execute(sql, callback);
+    return execute(sql, callback);
 }
