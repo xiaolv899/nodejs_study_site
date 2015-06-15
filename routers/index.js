@@ -19,7 +19,7 @@ router.get('/list',function(req,res,next){
             next(err);
         }else {
             res.render('list',{
-                //partials:{'header': 'share/header'},
+                partials:{'header': 'share/header'},
                 name: req.session[__appSessionKey],
                 'list': data.data
             });
@@ -32,7 +32,7 @@ router.get('/detail/:id',function(req,res,next){
             next(err);
         }else {
             res.render('detail',{
-                //partials:{'header': 'share/header'},
+                partials:{'header': 'share/header'},
                 name: req.session[__appSessionKey],
                 'data': data.data
             });
