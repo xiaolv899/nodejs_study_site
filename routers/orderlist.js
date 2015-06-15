@@ -28,7 +28,7 @@ var show = function (req,res,data){
 };
 
 router.get('/',function(req,res,next){
-    db.query('select * from [users]').
+    db.query('select * from [users] where name=\''+req.session[__appSessionKey]+'\'').
         then(function(data){
             if(data.length>0) {
                 var _uids = getIds(data,"id");
