@@ -23,5 +23,8 @@
     "mssql": "^2.1.5",
     "q": "^1.4.1",
     "uuid": "^2.0.1"
+  },
+  "devDependencies": {
+    "should": "^6.0.3"
   }
 }

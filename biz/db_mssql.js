@@ -46,7 +46,7 @@ function execute(sql, callback){
     return;*/
     var deferred = q.defer();
     var connection = new mssql.Connection(config, function(err) {
-        console.log(sql);
+        //console.log(sql);
         if(err) {
             console.log(err);
             if(callback)callback(err);
