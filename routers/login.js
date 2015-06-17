@@ -6,7 +6,7 @@ var path = require('path');
 var db = require('../biz/db_mssql');
 var router = express.Router();
 
-router.post('/login', function(req,res,next){
+router.post('/', function(req,res,next){
     console.log(req.body);
     var _name = (req.body.name||'').trim();
     db.query('select * from [users] where name=\''+_name+'\'',function(err,data){

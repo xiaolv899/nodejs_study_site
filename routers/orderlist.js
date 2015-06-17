@@ -27,7 +27,7 @@ var show = function (req,res,data){
     res.render('orderlist',$p);
 };
 
-router.get('/orderlist',function(req,res,next){
+router.get('/',function(req,res,next){
     var _userlist = null, _orderlist = null;
     db.query('select * from [users] where name=\''+req.session[__appSessionKey]+'\'').
         then(function(data){

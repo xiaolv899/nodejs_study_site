@@ -6,7 +6,7 @@ var path = require('path');
 var db = require('../biz/db_mssql');
 var router = express.Router();
 
-router.get('/detail/:id',function(req,res,next){
+router.get('/:id',function(req,res,next){
     db.query('select * from [products] where [id]='+parseInt(req.params.id)||0,function(err,data) {
         if(err){
             next(err);

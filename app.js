@@ -23,10 +23,13 @@ var userLogStream = FileStreamRotator.getStream({
 var auth = require('./biz/auth');
 var userlogger = require('./biz/weblog');
 
-/*var router = require('./routers/index');
+var router = require('./routers/index');
+var login = require('./routers/login');
+var logout = require('./routers/logout');
 var productlist = require('./routers/list');
+var productdetail = require('./routers/detail');
 var product = require('./routers/product');
-var orderlist = require('./routers/orderlist');*/
+var orderlist = require('./routers/orderlist');
 
 var app = express();
 
@@ -48,28 +51,32 @@ app.set('partials', {header: 'share/header'});
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(auth({path:["/detail","/product","/orderlist"],login:"/",key:__appSessionKey}));
+app.use(auth({path:["/logout","/list","/detail","/product","/orderlist"],login:"/",key:__appSessionKey}));
 app.use(userlogger({key: __appSessionKey,stream: userLogStream}));
 
-app.use('/',function(req, res, next){
-    var pathname = url.parse(req.url).pathname;
+/*app.use(function(req, res, next){
+    var pathname = orgpathname = url.parse(req.url).pathname;
     if(pathname === '/') pathname = '/index';
     //console.log(pathname);
     var routerpath = './routers'+pathname+'.js';
     console.log(path.join(__dirname,routerpath));
     fs.exists(path.join(__dirname,routerpath),function(err){
         if(err) {
-            console.log(routerpath);
-            require(routerpath)(req, res, next);
+            console.log(orgpathname+ ' '+routerpath);
+            //require(routerpath)(req, res, next);
+            app.use(orgpathname,require(routerpath));
         }else
             next();
     });
     //next();
-});
- /*app.use('/',router);
+});*/
+app.use('/',router);
+app.use('/login',login);
+app.use('/logout',logout);
 app.use('/list',productlist);
+app.use('/detail',productdetail);
 app.use('/product',product);
-app.use('/orderlist',orderlist);*/
+app.use('/orderlist',orderlist);
 
 app.use(function(req, res, next){
     var err = new Error('Not Found');
