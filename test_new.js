@@ -2,6 +2,7 @@
  * Created by Administrator on 2015/6/17.
  */
 var should = require('should');
+//var assert = require('assert');
 var Q = require('q');
 
 var query = function(sql) {
