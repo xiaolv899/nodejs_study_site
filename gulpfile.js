@@ -12,8 +12,8 @@ var zip = require('gulp-zip');
 var rename = require('gulp-rename');
 
 var paths = {
-    minscripts: ['./public/javascripts/jquery-1.9.1.min.js'],
-    scripts: ['./public/javascripts/list.js', './public/javascripts/product.js'],
+    minscripts: ['./public/javascripts/**/*.min.js'],
+    scripts: ['./public/javascripts/**/*.js','!./public/javascripts/**/*.min.js'],
     styles: ['./public/styles/*'],
     images: './public/images/**',
     zip: ['**',
@@ -28,14 +28,15 @@ var paths = {
         '!gulpfile.js']
 };
 
+//清理已生成文件
 gulp.task('clean', function(cb) {
-    // You can use multiple globbing patterns as you would with `gulp.src`
     del(['./public/build'], cb);
 });
 gulp.task('clean archive', function(cb) {
     del(['./dist'], cb);
 });
 
+//处理javascript文件
 gulp.task('scripts', ['clean'],  function(){
     return gulp.src(paths.scripts).
         pipe(jshint()).
@@ -46,6 +47,7 @@ gulp.task('scripts', ['clean'],  function(){
         pipe(concat('scripts.min.js')).
         pipe(gulp.dest('./public/build/js/'));
 });
+//
 gulp.task('Copy min JS Files', ['clean'],  function(){
     return gulp.src(paths.minscripts).
         pipe(gulp.dest('./public/build/js/'));
@@ -66,12 +68,10 @@ gulp.task('styles', ['clean'], function () {
         pipe(gulp.dest('./public/build/css'));
 });
 
-gulp.task('zip', ['clean archive'], function () {
+gulp.task('zip', ['clean archive','scripts','Copy min JS Files','images','styles'], function () {
     return gulp.src(paths.zip).
         pipe(zip('archive.zip')).
         pipe(gulp.dest('dist'));
 });
-//'Uglify JS Files'
-gulp.task('default',['scripts','Copy min JS Files','images','styles'], function(){
-    gulp.run('zip');
-});
+//Start
+gulp.task('default',['zip']);

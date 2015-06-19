@@ -4,5 +4,9 @@
 (function(){
     'use strict';
     var a = 'product';
+    if(a){
+        this.b = function(){
 
+        };
+    }
 })();
