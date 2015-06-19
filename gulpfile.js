@@ -27,7 +27,6 @@ var paths = {
         '!public/styles/**','!public/styles',
         '!gulpfile.js']
 };
-//'./bin/*','./biz/*','./public/build/*','./router/*','./views/*','!./test','!./.idea','!./node_modules'
 
 gulp.task('clean', function(cb) {
     // You can use multiple globbing patterns as you would with `gulp.src`
@@ -37,8 +36,10 @@ gulp.task('clean archive', function(cb) {
     del(['./dist'], cb);
 });
 
-gulp.task('Uglify JS Files', ['clean'],  function(){
+gulp.task('scripts', ['clean'],  function(){
     return gulp.src(paths.scripts).
+        pipe(jshint()).
+        pipe(jshint.reporter('default')).
         pipe(uglify()).
         pipe(rename({suffix: '.min'})).
         pipe(gulp.dest('./public/build/js/')).
@@ -49,17 +50,12 @@ gulp.task('Copy min JS Files', ['clean'],  function(){
     return gulp.src(paths.minscripts).
         pipe(gulp.dest('./public/build/js/'));
 });
-gulp.task('Check Js Files', function(){
-    return gulp.src(paths.scripts).
-        pipe(jshint()).
-        pipe(jshint.reporter('default'));
-});
 gulp.task('images', ['clean'], function () {
-    return gulp.src(paths.images)
-        .pipe(imagemin({
+    return gulp.src(paths.images).
+        pipe(imagemin({
             optimizationLevel: 5
-        }))
-        .pipe(gulp.dest('./public/build/images'));
+        })).
+        pipe(gulp.dest('./public/build/images'));
 });
 gulp.task('styles', ['clean'], function () {
     return gulp.src(paths.styles).
@@ -70,10 +66,12 @@ gulp.task('styles', ['clean'], function () {
         pipe(gulp.dest('./public/build/css'));
 });
 
-gulp.task('zip', ['clean archive','Uglify JS Files','Copy min JS Files','images','styles'], function () {
-    return gulp.src(paths.zip)
-        .pipe(zip('archive.zip'))
-        .pipe(gulp.dest('dist'));
+gulp.task('zip', ['clean archive'], function () {
+    return gulp.src(paths.zip).
+        pipe(zip('archive.zip')).
+        pipe(gulp.dest('dist'));
 });
 //'Uglify JS Files'
-gulp.task('default',['zip','Check Js Files']);
+gulp.task('default',['scripts','Copy min JS Files','images','styles'], function(){
+    gulp.run('zip');
+});
